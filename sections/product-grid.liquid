@@ -1,0 +1,175 @@
+{% comment %}
+  Product Grid Section for Deodap Theme
+  Features: Featured Products Display, Grid Layout, Product Cards
+{% endcomment %}
+
+<section class="product-grid-section">
+  <div class="product-grid-section__wrapper">
+    <!-- Section Header -->
+    {% if section.settings.title != blank or section.settings.description != blank %}
+      <div class="product-grid-section__header">
+        {% if section.settings.title != blank %}
+          <h2 class="product-grid-section__title">{{ section.settings.title }}</h2>
+        {% endif %}
+        
+        {% if section.settings.description != blank %}
+          <div class="product-grid-section__description">
+            {{ section.settings.description }}
+          </div>
+        {% endif %}
+      </div>
+    {% endif %}
+
+    <!-- Product Grid -->
+    <div class="product-grid" data-products-per-row="{{ section.settings.products_per_row }}">
+      {% case section.settings.product_source %}
+        {% when 'collection' %}
+          {% if section.settings.collection != blank %}
+            {% assign products = collections[section.settings.collection].products %}
+          {% else %}
+            {% assign products = collections.all.products %}
+          {% endif %}
+        {% when 'manual' %}
+          {% assign products = section.settings.products %}
+        {% else %}
+          {% assign products = collections.all.products %}
+      {% endcase %}
+
+      {% for product in products limit: section.settings.products_to_show %}
+        <div class="product-grid__item">
+          {% render 'product-card', product: product, show_rating: section.settings.show_rating, show_quick_add: section.settings.show_quick_add %}
+        </div>
+      {% else %}
+        <!-- Empty State -->
+        <div class="product-grid__empty">
+          <p>{{ 'sections.product_grid.no_products' | t }}</p>
+        </div>
+      {% endfor %}
+    </div>
+
+    <!-- View All Button -->
+    {% if section.settings.show_view_all and section.settings.collection != blank %}
+      <div class="product-grid-section__footer">
+        <a href="{{ collections[section.settings.collection].url }}" class="product-grid-section__view-all">
+          {{ section.settings.view_all_text }}
+        </a>
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Product Grid",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section Content"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Section Title",
+      "default": "Featured Products"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Section Description",
+      "default": "<p>Discover our best-selling products</p>"
+    },
+    {
+      "type": "header",
+      "content": "Product Selection"
+    },
+    {
+      "type": "select",
+      "id": "product_source",
+      "label": "Product Source",
+      "options": [
+        {
+          "value": "collection",
+          "label": "Collection"
+        },
+        {
+          "value": "manual",
+          "label": "Manual Selection"
+        }
+      ],
+      "default": "collection"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    },
+    {
+      "type": "product_list",
+      "id": "products",
+      "label": "Products",
+      "limit": 12
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "label": "Products to Show",
+      "min": 2,
+      "max": 24,
+      "step": 1,
+      "default": 8
+    },
+    {
+      "type": "header",
+      "content": "Grid Layout"
+    },
+    {
+      "type": "range",
+      "id": "products_per_row",
+      "label": "Products per Row (Desktop)",
+      "min": 2,
+      "max": 6,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "header",
+      "content": "Product Card Settings"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_rating",
+      "label": "Show Product Ratings",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_quick_add",
+      "label": "Show Quick Add Button",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "View All Button"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_view_all",
+      "label": "Show View All Button",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "view_all_text",
+      "label": "View All Button Text",
+      "default": "View All Products"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product Grid"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,259 @@
+{
+  "current": {
+    "logo": "",
+    "logo_width": 200,
+    "favicon": "",
+    "colors_primary": "#007bff",
+    "colors_secondary": "#6c757d",
+    "colors_accent": "#28a745",
+    "colors_text": "#333333",
+    "colors_background": "#ffffff",
+    "colors_border": "#e0e0e0",
+    "colors_sale": "#dc3545",
+    "typography_heading_font": "Roboto",
+    "typography_body_font": "Open Sans",
+    "typography_heading_size": "32",
+    "typography_body_size": "16",
+    "layout_container_width": "1200",
+    "layout_product_grid_columns": "4",
+    "layout_product_grid_columns_tablet": "3",
+    "layout_product_grid_columns_mobile": "2",
+    "header_show_search": true,
+    "header_show_cart": true,
+    "header_show_account": true,
+    "header_show_wishlist": false,
+    "header_sticky": true,
+    "header_transparent": false,
+    "hero_banner_show": true,
+    "hero_banner_title": "Monsoon Mega Sale",
+    "hero_banner_subtitle": "Up to 70% Off on All Products",
+    "hero_banner_button_text": "Shop Now",
+    "hero_banner_button_url": "/collections/all",
+    "hero_banner_background_image": "",
+    "hero_banner_background_color": "#f8f9fa",
+    "hero_banner_text_color": "#333333",
+    "hero_banner_height_desktop": "400",
+    "hero_banner_height_mobile": "300",
+    "product_show_ratings": true,
+    "product_show_reviews_count": true,
+    "product_show_sale_badge": true,
+    "product_show_quick_add": true,
+    "product_image_hover_effect": "zoom",
+    "product_sale_badge_text": "Sale",
+    "product_new_badge_text": "New",
+    "product_soldout_badge_text": "Sold Out",
+    "collection_show_description": true,
+    "collection_show_image": true,
+    "collection_grid_columns": "4",
+    "collection_grid_columns_tablet": "3",
+    "collection_grid_columns_mobile": "2",
+    "footer_show_newsletter": true,
+    "footer_newsletter_title": "Stay Updated",
+    "footer_newsletter_subtitle": "Subscribe to get special offers, free giveaways, and deals.",
+    "footer_show_social": true,
+    "footer_show_payment_icons": true,
+    "footer_copyright": "© 2025 Deodap. All rights reserved.",
+    "social_facebook_url": "",
+    "social_twitter_url": "",
+    "social_instagram_url": "",
+    "social_youtube_url": "",
+    "social_pinterest_url": "",
+    "social_linkedin_url": "",
+    "cart_type": "drawer",
+    "cart_show_recommendations": true,
+    "cart_free_shipping_threshold": "500",
+    "cart_free_shipping_message": "You're ${amount} away from free shipping!",
+    "search_enable_suggestions": true,
+    "search_show_products": true,
+    "search_show_collections": false,
+    "search_show_pages": false,
+    "currency_format": "${{amount}}",
+    "checkout_logo": "",
+    "checkout_banner_background_color": "#ffffff",
+    "checkout_input_background_color": "#ffffff",
+    "checkout_button_color": "#007bff",
+    "checkout_accent_color": "#28a745",
+    "checkout_error_color": "#dc3545",
+    "announcement_bar_enabled": true,
+    "announcement_bar_text": "Free shipping on orders over $50! Use code: FREESHIP",
+    "announcement_bar_link": "/collections/all",
+    "announcement_bar_color": "#007bff",
+    "announcement_bar_background": "#ffffff",
+    "mobile_menu_style": "slide",
+    "mobile_menu_background": "#ffffff",
+    "mobile_menu_text_color": "#333333",
+    "breadcrumbs_enabled": true,
+    "breadcrumbs_show_home": true,
+    "quick_view_enabled": false,
+    "wishlist_enabled": false,
+    "compare_enabled": false,
+    "recently_viewed_enabled": true,
+    "recently_viewed_limit": "8",
+    "related_products_enabled": true,
+    "related_products_limit": "4",
+    "related_products_title": "You may also like",
+    "blog_show_excerpt": true,
+    "blog_excerpt_length": "150",
+    "blog_show_author": true,
+    "blog_show_date": true,
+    "blog_show_tags": true,
+    "blog_sidebar_enabled": true,
+    "pagination_type": "numbers",
+    "products_per_page": "24",
+    "enable_ajax_cart": true,
+    "enable_quantity_breaks": true,
+    "enable_product_reviews": true,
+    "enable_search_autocomplete": true,
+    "enable_lazy_loading": true,
+    "enable_rtl": false,
+    "custom_css": "",
+    "custom_js": "",
+    "google_analytics_id": "",
+    "facebook_pixel_id": "",
+    "preloader_enabled": false,
+    "preloader_logo": "",
+    "age_verification_enabled": false,
+    "age_verification_message": "You must be 18 or older to enter this site.",
+    "popup_enabled": false,
+    "popup_delay": "5000",
+    "popup_title": "",
+    "popup_content": "",
+    "popup_image": "",
+    "sections": {
+      "header": {
+        "type": "header",
+        "settings": {
+          "logo": "",
+          "logo_width": 200,
+          "main_menu": "main-menu",
+          "enable_search": true,
+          "enable_cart": true,
+          "enable_account": true,
+          "sticky_header": true
+        }
+      },
+      "hero-banner": {
+        "type": "hero-banner",
+        "settings": {
+          "title": "Monsoon Mega Sale",
+          "subtitle": "Up to 70% Off on All Products",
+          "button_text": "Shop Now",
+          "button_url": "/collections/all",
+          "background_image": "",
+          "background_color": "#f8f9fa",
+          "text_color": "#333333",
+          "height_desktop": 400,
+          "height_mobile": 300
+        }
+      },
+      "featured-products": {
+        "type": "product-grid",
+        "settings": {
+          "title": "Featured Products",
+          "collection": "featured",
+          "products_to_show": 8,
+          "columns_desktop": 4,
+          "columns_tablet": 3,
+          "columns_mobile": 2,
+          "show_view_all": true
+        }
+      },
+      "collection-list": {
+        "type": "collection-list",
+        "settings": {
+          "title": "Shop by Category",
+          "collections_to_show": 4,
+          "columns_desktop": 4,
+          "columns_tablet": 3,
+          "columns_mobile": 2,
+          "show_description": true
+        }
+      },
+      "newsletter": {
+        "type": "newsletter",
+        "settings": {
+          "title": "Stay Updated",
+          "subtitle": "Subscribe to get special offers, free giveaways, and deals.",
+          "background_color": "#f8f9fa",
+          "text_color": "#333333"
+        }
+      },
+      "footer": {
+        "type": "footer",
+        "settings": {
+          "show_newsletter": false,
+          "show_social": true,
+          "show_payment_icons": true,
+          "copyright_text": "© 2025 Deodap. All rights reserved."
+        },
+        "blocks": [
+          {
+            "type": "menu",
+            "id": "footer-menu-1",
+            "settings": {
+              "title": "Quick Links",
+              "menu": "footer"
+            }
+          },
+          {
+            "type": "menu",
+            "id": "footer-menu-2",
+            "settings": {
+              "title": "Customer Care",
+              "menu": "footer-customer-care"
+            }
+          },
+          {
+            "type": "text",
+            "id": "footer-text-1",
+            "settings": {
+              "title": "About Deodap",
+              "content": "Your trusted online destination for quality products at wholesale prices. We offer a wide range of products with fast shipping and excellent customer service."
+            }
+          }
+        ]
+      }
+    }
+  },
+  "presets": {
+    "Default": {
+      "colors_primary": "#007bff",
+      "colors_secondary": "#6c757d",
+      "colors_accent": "#28a745",
+      "typography_heading_font": "Roboto",
+      "typography_body_font": "Open Sans",
+      "layout_product_grid_columns": "4",
+      "hero_banner_show": true,
+      "product_show_ratings": true,
+      "product_show_quick_add": true,
+      "footer_show_newsletter": true,
+      "cart_type": "drawer"
+    },
+    "Minimal": {
+      "colors_primary": "#000000",
+      "colors_secondary": "#666666",
+      "colors_accent": "#333333",
+      "typography_heading_font": "Arial",
+      "typography_body_font": "Arial",
+      "layout_product_grid_columns": "3",
+      "hero_banner_show": false,
+      "product_show_ratings": false,
+      "product_show_quick_add": false,
+      "footer_show_newsletter": false,
+      "cart_type": "page"
+    },
+    "Colorful": {
+      "colors_primary": "#ff6b6b",
+      "colors_secondary": "#4ecdc4",
+      "colors_accent": "#45b7d1",
+      "typography_heading_font": "Poppins",
+      "typography_body_font": "Poppins",
+      "layout_product_grid_columns": "4",
+      "hero_banner_show": true,
+      "product_show_ratings": true,
+      "product_show_quick_add": true,
+      "footer_show_newsletter": true,
+      "cart_type": "drawer"
+    }
+  }
+}

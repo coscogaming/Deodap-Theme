@@ -1,0 +1,208 @@
+{% comment %}
+  Hero Banner Section for Deodap Theme
+  Features: Background Image, Overlay, Text Content, CTA Button
+{% endcomment %}
+
+<section class="hero-banner">
+  <div class="hero-banner__wrapper">
+    <!-- Background Image -->
+    {% if section.settings.background_image %}
+      <div class="hero-banner__background">
+        <img 
+          src="{{ section.settings.background_image | img_url: '1600x' }}"
+          alt="{{ section.settings.title | escape }}"
+          loading="lazy"
+          class="hero-banner__background-image"
+        >
+      </div>
+    {% endif %}
+
+    <!-- Overlay -->
+    {% if section.settings.show_overlay %}
+      <div class="hero-banner__overlay" style="opacity: {{ section.settings.overlay_opacity | divided_by: 100.0 }};"></div>
+    {% endif %}
+
+    <!-- Content -->
+    <div class="hero-banner__content">
+      <div class="hero-banner__content-wrapper">
+        <!-- Title -->
+        {% if section.settings.title != blank %}
+          <h1 class="hero-banner__title">{{ section.settings.title }}</h1>
+        {% endif %}
+
+        <!-- Subtitle -->
+        {% if section.settings.subtitle != blank %}
+          <p class="hero-banner__subtitle">{{ section.settings.subtitle }}</p>
+        {% endif %}
+
+        <!-- Description -->
+        {% if section.settings.description != blank %}
+          <div class="hero-banner__description">
+            {{ section.settings.description }}
+          </div>
+        {% endif %}
+
+        <!-- CTA Buttons -->
+        <div class="hero-banner__buttons">
+          {% if section.settings.button_1_text != blank and section.settings.button_1_url != blank %}
+            <a 
+              href="{{ section.settings.button_1_url }}" 
+              class="hero-banner__button hero-banner__button--primary"
+            >
+              {{ section.settings.button_1_text }}
+            </a>
+          {% endif %}
+
+          {% if section.settings.button_2_text != blank and section.settings.button_2_url != blank %}
+            <a 
+              href="{{ section.settings.button_2_url }}" 
+              class="hero-banner__button hero-banner__button--secondary"
+            >
+              {{ section.settings.button_2_text }}
+            </a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Hero Banner",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Background"
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Background Image"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_overlay",
+      "label": "Show Overlay",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "label": "Overlay Opacity",
+      "min": 0,
+      "max": 100,
+      "step": 10,
+      "unit": "%",
+      "default": 30
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Welcome to Our Store"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "Discover amazing products at great prices"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description",
+      "default": "<p>Shop our latest collection and find everything you need.</p>"
+    },
+    {
+      "type": "select",
+      "id": "content_alignment",
+      "label": "Content Alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "header",
+      "content": "First Button"
+    },
+    {
+      "type": "text",
+      "id": "button_1_text",
+      "label": "Button Text",
+      "default": "Shop Now"
+    },
+    {
+      "type": "url",
+      "id": "button_1_url",
+      "label": "Button Link"
+    },
+    {
+      "type": "header",
+      "content": "Second Button"
+    },
+    {
+      "type": "text",
+      "id": "button_2_text",
+      "label": "Button Text",
+      "default": "Learn More"
+    },
+    {
+      "type": "url",
+      "id": "button_2_url",
+      "label": "Button Link"
+    },
+    {
+      "type": "header",
+      "content": "Section Settings"
+    },
+    {
+      "type": "select",
+      "id": "height",
+      "label": "Section Height",
+      "options": [
+        {
+          "value": "small",
+          "label": "Small"
+        },
+        {
+          "value": "medium",
+          "label": "Medium"
+        },
+        {
+          "value": "large",
+          "label": "Large"
+        },
+        {
+          "value": "full",
+          "label": "Full Screen"
+        }
+      ],
+      "default": "medium"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hero Banner"
+    }
+  ]
+}
+{% endschema %}

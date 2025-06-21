@@ -1,0 +1,292 @@
+/**
+ * Deodap Theme - Icon Styles
+ * Contains icon styles and SVG icon definitions
+ */
+
+/* Icon Base Styles */
+.icon {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  fill: currentColor;
+  vertical-align: middle;
+  transition: all 0.3s ease;
+}
+
+.icon-small {
+  width: 16px;
+  height: 16px;
+}
+
+.icon-medium {
+  width: 20px;
+  height: 20px;
+}
+
+.icon-large {
+  width: 32px;
+  height: 32px;
+}
+
+.icon-xl {
+  width: 48px;
+  height: 48px;
+}
+
+/* Icon Colors */
+.icon-primary {
+  color: var(--primary-color, #007bff);
+}
+
+.icon-secondary {
+  color: var(--secondary-color, #6c757d);
+}
+
+.icon-success {
+  color: var(--success-color, #28a745);
+}
+
+.icon-danger {
+  color: var(--danger-color, #dc3545);
+}
+
+.icon-warning {
+  color: var(--warning-color, #ffc107);
+}
+
+.icon-white {
+  color: #ffffff;
+}
+
+/* Icon States */
+.icon:hover {
+  transform: scale(1.1);
+}
+
+.icon-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+.icon-button:hover {
+  background-color: rgba(0,0,0,0.1);
+}
+
+.icon-button:focus {
+  outline: 2px solid var(--primary-color, #007bff);
+  outline-offset: 2px;
+}
+
+/* Star Rating Icons */
+.rating-stars {
+  display: inline-flex;
+  gap: 2px;
+  color: #ffc107;
+}
+
+.rating-stars .icon {
+  width: 16px;
+  height: 16px;
+}
+
+.rating-stars .star-empty {
+  color: #e0e0e0;
+}
+
+/* Shopping Cart Icon with Badge */
+.cart-icon-container {
+  position: relative;
+  display: inline-block;
+}
+
+.cart-count {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: var(--primary-color, #007bff);
+  color: white;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  font-size: 12px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+}
+
+/* Social Media Icons */
+.social-icons {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
+.social-icons .icon {
+  width: 20px;
+  height: 20px;
+  color: #666;
+  transition: color 0.3s ease;
+}
+
+.social-icons .icon:hover {
+  color: var(--primary-color, #007bff);
+}
+
+/* Payment Icons */
+.payment-icons {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.payment-icons .icon {
+  width: 40px;
+  height: 24px;
+  color: #666;
+  opacity: 0.7;
+  transition: opacity 0.3s ease;
+}
+
+.payment-icons .icon:hover {
+  opacity: 1;
+}
+
+/* Arrow Icons */
+.arrow-icon {
+  transition: transform 0.3s ease;
+}
+
+.arrow-icon.rotate-180 {
+  transform: rotate(180deg);
+}
+
+/* Loading Spinner */
+.loading-icon {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* SVG Icon Definitions */
+.icon-svg {
+  display: none;
+}
+
+/* Icon Sprite - Hidden SVG containing all icons */
+.icon-defs {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+/* Specific Icon Styles */
+.menu-icon,
+.close-icon {
+  width: 28px;
+  height: 28px;
+  stroke: currentColor;
+  stroke-width: 2;
+  fill: none;
+}
+
+.search-icon,
+.cart-icon,
+.user-icon,
+.heart-icon {
+  width: 24px;
+  height: 24px;
+  stroke: currentColor;
+  stroke-width: 2;
+  fill: none;
+}
+
+.chevron-down,
+.chevron-up,
+.chevron-left,
+.chevron-right {
+  width: 20px;
+  height: 20px;
+  stroke: currentColor;
+  stroke-width: 2;
+  fill: none;
+}
+
+.plus-icon,
+.minus-icon {
+  width: 18px;
+  height: 18px;
+  stroke: currentColor;
+  stroke-width: 2;
+  fill: none;
+}
+
+.star-icon {
+  width: 16px;
+  height: 16px;
+  fill: currentColor;
+  stroke: none;
+}
+
+.check-icon {
+  width: 20px;
+  height: 20px;
+  stroke: currentColor;
+  stroke-width: 2;
+  fill: none;
+  color: var(--success-color, #28a745);
+}
+
+.x-icon {
+  width: 20px;
+  height: 20px;
+  stroke: currentColor;
+  stroke-width: 2;
+  fill: none;
+  color: var(--danger-color, #dc3545);
+}
+
+.info-icon {
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+  color: var(--primary-color, #007bff);
+}
+
+/* Responsive Icon Adjustments */
+@media screen and (max-width: 767px) {
+  .icon {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .icon-large {
+    width: 28px;
+    height: 28px;
+  }
+  
+  .menu-icon,
+  .close-icon {
+    width: 24px;
+    height: 24px;
+  }
+  
+  .payment-icons .icon {
+    width: 32px;
+    height: 20px;
+  }
+  
+  .social-icons {
+    gap: 12px;
+  }
+}

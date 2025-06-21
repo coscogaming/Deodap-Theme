@@ -1,0 +1,236 @@
+{% comment %}
+  Footer Section for Deodap Theme
+  Features: Newsletter, Social Links, Footer Text, Payment Icons
+{% endcomment %}
+
+<footer class="footer" role="contentinfo">
+  <div class="footer__wrapper">
+    <!-- Newsletter Section -->
+    {% if section.settings.show_newsletter %}
+      <div class="footer__newsletter">
+        <div class="newsletter">
+          <h3 class="newsletter__title">{{ section.settings.newsletter_title }}</h3>
+          <p class="newsletter__text">{{ section.settings.newsletter_text }}</p>
+          
+          {% form 'customer', class: 'newsletter__form' %}
+            {% if form.posted_successfully? %}
+              <div class="newsletter__success">
+                {{ 'sections.newsletter.success' | t }}
+              </div>
+            {% endif %}
+            
+            {% if form.errors %}
+              <div class="newsletter__error">
+                {{ form.errors | default_errors }}
+              </div>
+            {% endif %}
+            
+            <div class="newsletter__input-wrapper">
+              <input 
+                type="email" 
+                name="contact[email]" 
+                value="{% if customer %}{{ customer.email }}{% endif %}"
+                placeholder="{{ 'sections.newsletter.label' | t }}"
+                class="newsletter__input"
+                aria-label="{{ 'sections.newsletter.label' | t }}"
+                required
+              >
+              <button type="submit" class="newsletter__submit">
+                {{ 'sections.newsletter.button_label' | t }}
+              </button>
+            </div>
+            
+            <input type="hidden" name="contact[tags]" value="newsletter">
+          {% endform %}
+        </div>
+      </div>
+    {% endif %}
+
+    <!-- Footer Content -->
+    <div class="footer__content">
+      <!-- Links Section -->
+      <div class="footer__links">
+        {% for block in section.blocks %}
+          {% case block.type %}
+            {% when 'link_list' %}
+              {% if linklists[block.settings.menu].links.size > 0 %}
+                <div class="footer__link-list" {{ block.shopify_attributes }}>
+                  <h4 class="footer__link-title">{{ linklists[block.settings.menu].title }}</h4>
+                  <ul class="footer__links-list">
+                    {% for link in linklists[block.settings.menu].links %}
+                      <li class="footer__link-item">
+                        <a href="{{ link.url }}" class="footer__link">
+                          {{ link.title }}
+                        </a>
+                      </li>
+                    {% endfor %}
+                  </ul>
+                </div>
+              {% endif %}
+            
+            {% when 'text' %}
+              <div class="footer__text-block" {{ block.shopify_attributes }}>
+                {% if block.settings.title != blank %}
+                  <h4 class="footer__text-title">{{ block.settings.title }}</h4>
+                {% endif %}
+                {% if block.settings.text != blank %}
+                  <div class="footer__text-content">
+                    {{ block.settings.text }}
+                  </div>
+                {% endif %}
+              </div>
+          {% endcase %}
+        {% endfor %}
+      </div>
+
+      <!-- Social Media -->
+      {% if section.settings.show_social %}
+        <div class="footer__social">
+          <h4 class="footer__social-title">{{ section.settings.social_title }}</h4>
+          <div class="footer__social-links">
+            {% if settings.social_facebook %}
+              <a href="{{ settings.social_facebook }}" class="footer__social-link" target="_blank" rel="noopener noreferrer">
+                {% render 'icon', icon: 'facebook' %}
+                <span class="sr-only">Facebook</span>
+              </a>
+            {% endif %}
+            
+            {% if settings.social_instagram %}
+              <a href="{{ settings.social_instagram }}" class="footer__social-link" target="_blank" rel="noopener noreferrer">
+                {% render 'icon', icon: 'instagram' %}
+                <span class="sr-only">Instagram</span>
+              </a>
+            {% endif %}
+            
+            {% if settings.social_twitter %}
+              <a href="{{ settings.social_twitter }}" class="footer__social-link" target="_blank" rel="noopener noreferrer">
+                {% render 'icon', icon: 'twitter' %}
+                <span class="sr-only">Twitter</span>
+              </a>
+            {% endif %}
+          </div>
+        </div>
+      {% endif %}
+    </div>
+
+    <!-- Footer Bottom -->
+    <div class="footer__bottom">
+      <!-- Copyright -->
+      <div class="footer__copyright">
+        {% if settings.footer_text != blank %}
+          {{ settings.footer_text }}
+        {% else %}
+          <p>&copy; {{ 'now' | date: '%Y' }} {{ shop.name }}. All rights reserved.</p>
+        {% endif %}
+      </div>
+
+      <!-- Payment Icons -->
+      {% if section.settings.show_payment_icons %}
+        <div class="footer__payment">
+          <span class="footer__payment-title">{{ 'sections.footer.payment' | t }}</span>
+          <div class="footer__payment-icons">
+            {% for type in shop.enabled_payment_types %}
+              {{ type | payment_type_img_tag: class: 'footer__payment-icon' }}
+            {% endfor %}
+          </div>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Footer",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Newsletter"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_newsletter",
+      "label": "Show Newsletter Signup",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "newsletter_title",
+      "label": "Newsletter Title",
+      "default": "Subscribe to our newsletter"
+    },
+    {
+      "type": "textarea",
+      "id": "newsletter_text",
+      "label": "Newsletter Text",
+      "default": "Get the latest updates on new products and upcoming sales"
+    },
+    {
+      "type": "header",
+      "content": "Social Media"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_social",
+      "label": "Show Social Media Links",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "social_title",
+      "label": "Social Media Title",
+      "default": "Follow Us"
+    },
+    {
+      "type": "header",
+      "content": "Payment Icons"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_payment_icons",
+      "label": "Show Payment Icons",
+      "default": true
+    }
+  ],
+  "blocks": [
+    {
+      "type": "link_list",
+      "name": "Menu",
+      "settings": [
+        {
+          "type": "link_list",
+          "id": "menu",
+          "label": "Menu",
+          "info": "This menu won't show dropdown items"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "name": "Text Block",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text"
+        }
+      ]
+    }
+  ],
+  "default": {
+    "blocks": [
+      {
+        "type": "link_list",
+        "settings": {
+          "menu": "footer"
+        }
+      }
+    ]
+  }
+}
+{% endschema %}

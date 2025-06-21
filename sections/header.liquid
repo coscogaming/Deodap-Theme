@@ -1,0 +1,160 @@
+{% comment %}
+  Header Section for Deodap Theme
+  Features: Logo, Navigation, Cart, Mobile Menu
+{% endcomment %}
+
+<header class="header" role="banner">
+  <div class="header__wrapper">
+    <!-- Mobile Menu Toggle -->
+    <button type="button" class="header__mobile-menu-toggle" aria-controls="mobile-menu" aria-expanded="false">
+      <span class="sr-only">{{ 'sections.header.menu' | t }}</span>
+      <span class="hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+      </span>
+    </button>
+
+    <!-- Logo -->
+    <div class="header__logo">
+      <a href="{{ routes.root_url }}" class="header__logo-link">
+        {% if settings.logo %}
+          <img 
+            src="{{ settings.logo | img_url: '300x' }}" 
+            alt="{{ shop.name }}"
+            width="{{ settings.logo_width }}"
+            height="auto"
+            loading="lazy"
+            class="header__logo-image"
+          >
+        {% else %}
+          <span class="header__logo-text">{{ shop.name }}</span>
+        {% endif %}
+      </a>
+    </div>
+
+    <!-- Desktop Navigation -->
+    <nav class="header__nav desktop-nav" role="navigation">
+      {% for link in linklists[settings.main_menu].links %}
+        <a href="{{ link.url }}" class="header__nav-link">
+          {{ link.title }}
+        </a>
+      {% endfor %}
+    </nav>
+
+    <!-- Header Actions -->
+    <div class="header__actions">
+      <!-- Search -->
+      <div class="header__search">
+        <button type="button" class="header__search-toggle" aria-controls="search-drawer">
+          {% render 'icon', icon: 'search' %}
+          <span class="sr-only">{{ 'general.search.search' | t }}</span>
+        </button>
+      </div>
+
+      <!-- Cart -->
+      <div class="header__cart">
+        <a href="{{ routes.cart_url }}" class="header__cart-link">
+          {% render 'icon', icon: 'bag' %}
+          <span class="header__cart-count">{{ cart.item_count }}</span>
+          <span class="sr-only">
+            {{ 'sections.header.cart_count' | t: count: cart.item_count }}
+          </span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile Navigation -->
+  <nav class="mobile-nav" id="mobile-menu" role="navigation" aria-hidden="true">
+    <div class="mobile-nav__wrapper">
+      <div class="mobile-nav__header">
+        <span class="mobile-nav__title">{{ 'sections.header.menu' | t }}</span>
+        <button type="button" class="mobile-nav__close">
+          {% render 'icon', icon: 'close' %}
+          <span class="sr-only">{{ 'accessibility.close' | t }}</span>
+        </button>
+      </div>
+      
+      <ul class="mobile-nav__list">
+        {% for link in linklists[settings.main_menu].links %}
+          <li class="mobile-nav__item">
+            <a href="{{ link.url }}" class="mobile-nav__link">
+              {{ link.title }}
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Search Drawer -->
+  <div class="search-drawer" id="search-drawer" aria-hidden="true">
+    <div class="search-drawer__wrapper">
+      <div class="search-drawer__header">
+        <span class="search-drawer__title">{{ 'general.search.search' | t }}</span>
+        <button type="button" class="search-drawer__close">
+          {% render 'icon', icon: 'close' %}
+          <span class="sr-only">{{ 'accessibility.close' | t }}</span>
+        </button>
+      </div>
+      
+      <form action="{{ routes.search_url }}" method="get" class="search-drawer__form">
+        <div class="search-drawer__input-wrapper">
+          <input 
+            type="search" 
+            name="q" 
+            value="{{ search.terms | escape }}"
+            placeholder="{{ 'general.search.placeholder' | t }}"
+            class="search-drawer__input"
+            aria-label="{{ 'general.search.search' | t }}"
+          >
+          <button type="submit" class="search-drawer__submit">
+            {% render 'icon', icon: 'search' %}
+            <span class="sr-only">{{ 'general.search.submit' | t }}</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Overlay -->
+  <div class="header__overlay" aria-hidden="true"></div>
+</header>
+
+{% schema %}
+{
+  "name": "Header",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Logo"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo Image"
+    },
+    {
+      "type": "range",
+      "id": "logo_width",
+      "label": "Logo Width",
+      "min": 100,
+      "max": 300,
+      "step": 10,
+      "unit": "px",
+      "default": 150
+    },
+    {
+      "type": "header",
+      "content": "Navigation"
+    },
+    {
+      "type": "link_list",
+      "id": "main_menu",
+      "label": "Main Menu",
+      "default": "main-menu"
+    }
+  ]
+}
+{% endschema %}
