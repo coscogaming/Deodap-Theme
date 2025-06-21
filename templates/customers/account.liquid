@@ -1,0 +1,131 @@
+<!-- templates/customers/account.liquid -->
+{% layout 'theme' %}
+
+<div class="customer-account-wrapper">
+  <div class="container">
+    <!-- Header -->
+    <div class="account-header">
+      <div class="account-welcome">
+        <h1 class="page-title">{{ 'customer.account.title' | t }}</h1>
+        <p class="welcome-message">
+          {{ 'customer.account.welcome' | t: first_name: customer.first_name }}
+        </p>
+      </div>
+      <div class="account-actions">
+        <a href="{{ routes.account_logout_url }}" class="btn btn-outline">
+          {{ 'customer.account.log_out' | t }}
+        </a>
+      </div>
+    </div>
+
+    <!-- Overview Stats -->
+    <div class="account-overview">
+      <div class="overview-card">
+        <h2 class="card-title">{{ 'customer.account.overview' | t }}</h2>
+        <div class="overview-stats">
+          <div class="stat-item">
+            <div class="stat-number">{{ customer.orders_count }}</div>
+            <div class="stat-label">{{ 'customer.account.total_orders' | t }}</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number">{{ customer.total_spent | money }}</div>
+            <div class="stat-label">{{ 'customer.account.total_spent' | t }}</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number">{{ customer.addresses_count }}</div>
+            <div class="stat-label">{{ 'customer.account.saved_addresses' | t }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <div class="account-navigation">
+      <nav class="account-nav">
+        <a href="#orders" class="nav-item active" data-tab="orders">{{ 'customer.account.orders' | t }}</a>
+        <a href="#addresses" class="nav-item" data-tab="addresses">{{ 'customer.account.addresses' | t }}</a>
+        <a href="#profile" class="nav-item" data-tab="profile">{{ 'customer.account.profile' | t }}</a>
+      </nav>
+    </div>
+
+    <!-- Tab Content -->
+    <div class="account-tabs">
+      <!-- Orders Tab -->
+      <div id="orders" class="tab-content active">
+        {% if customer.orders.size > 0 %}
+          {% for order in customer.orders %}
+            <div class="order-item">
+              <h4><a href="{{ order.customer_url }}">#{{ order.name }}</a></h4>
+              <p>{{ order.created_at | date: "%b %d, %Y" }} — {{ order.financial_status_label }} — {{ order.total_price | money }}</p>
+              <a href="{{ order.customer_url }}" class="btn btn-sm btn-outline">
+                {{ 'customer.account.view_order' | t }}
+              </a>
+            </div>
+          {% endfor %}
+        {% else %}
+          <p>{{ 'customer.account.no_orders_message' | t }}</p>
+          <a href="{{ routes.root_url }}" class="btn btn-primary">{{ 'customer.account.start_shopping' | t }}</a>
+        {% endif %}
+      </div>
+
+      <!-- Addresses Tab -->
+      <div id="addresses" class="tab-content">
+        <a href="{{ routes.account_addresses_url }}" class="btn btn-primary">
+          {{ 'customer.account.manage_addresses' | t }}
+        </a>
+        {% if customer.addresses.size > 0 %}
+          <ul class="addresses-list">
+            {% for address in customer.addresses %}
+              <li>
+                <strong>{{ address.first_name }} {{ address.last_name }}</strong><br>
+                {{ address.address1 }}<br>
+                {% if address.address2 != blank %}{{ address.address2 }}<br>{% endif %}
+                {{ address.city }}, {{ address.province }} {{ address.zip }}<br>
+                {{ address.country }}<br>
+                {{ address.phone }}
+              </li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <p>{{ 'customer.account.no_addresses_message' | t }}</p>
+        {% endif %}
+      </div>
+
+      <!-- Profile Tab -->
+      <div id="profile" class="tab-content">
+        {% form 'customer' %}
+          <label>{{ 'customer.account.first_name' | t }}</label>
+          <input type="text" name="customer[first_name]" value="{{ customer.first_name }}">
+
+          <label>{{ 'customer.account.last_name' | t }}</label>
+          <input type="text" name="customer[last_name]" value="{{ customer.last_name }}">
+
+          <label>{{ 'customer.account.email' | t }}</label>
+          <input type="email" name="customer[email]" value="{{ customer.email }}">
+
+          <label>
+            <input type="checkbox" name="customer[accepts_marketing]" {% if customer.accepts_marketing %}checked{% endif %}>
+            {{ 'customer.account.accepts_marketing' | t }}
+          </label>
+
+          <button type="submit" class="btn btn-primary">{{ 'customer.account.update_profile' | t }}</button>
+        {% endform %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+document.querySelectorAll('.nav-item').forEach(tab => {
+  tab.addEventListener('click', function (e) {
+    e.preventDefault();
+    const tabId = this.getAttribute('data-tab');
+
+    document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+
+    this.classList.add('active');
+    document.getElementById(tabId).classList.add('active');
+  });
+});
+</script>

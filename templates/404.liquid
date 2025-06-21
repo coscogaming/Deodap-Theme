@@ -1,0 +1,245 @@
+{% comment %}
+  404 Error page template
+{% endcomment %}
+
+<div class="error-page">
+  <div class="container">
+    <div class="error-content">
+      <div class="error-illustration">
+        <div class="error-number">404</div>
+        <div class="error-icon">
+          {% render 'icon', icon: 'alert-triangle' %}
+        </div>
+      </div>
+      
+      <div class="error-message">
+        <h1>Oops! Page Not Found</h1>
+        <p>The page you're looking for seems to have wandered off. Don't worry, it happens to the best of us!</p>
+      </div>
+      
+      <div class="error-actions">
+        <a href="{{ routes.root_url }}" class="btn btn-primary">Go Home</a>
+        <a href="{{ routes.all_products_collection_url }}" class="btn btn-outline">Shop Now</a>
+      </div>
+      
+      <!-- Search Form -->
+      <div class="error-search">
+        <p>Or search for what you need:</p>
+        <form action="{{ routes.search_url }}" method="get" class="search-form">
+          <div class="search-input-wrapper">
+            <input type="search" 
+                   name="q" 
+                   placeholder="Search products..." 
+                   class="search-input">
+            <button type="submit" class="search-button">
+              {% render 'icon', icon: 'search' %}
+            </button>
+          </div>
+        </form>
+      </div>
+      
+      <!-- Popular Links -->
+      <div class="popular-links">
+        <h3>Popular Pages</h3>
+        <div class="links-grid">
+          <a href="{{ routes.all_products_collection_url }}">All Products</a>
+          <a href="{{ pages.about.url }}">About Us</a>
+          <a href="{{ pages.contact.url }}">Contact</a>
+          <a href="{{ blog.news.url }}">News & Updates</a>
+          <a href="{{ pages.shipping.url }}">Shipping Info</a>
+          <a href="{{ pages.returns.url }}">Returns</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.error-page {
+  padding: 60px 0;
+  min-height: 70vh;
+  display: flex;
+  align-items: center;
+}
+
+.error-content {
+  text-align: center;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.error-illustration {
+  position: relative;
+  margin-bottom: 3rem;
+}
+
+.error-number {
+  font-size: 8rem;
+  font-weight: 900;
+  color: #f8f9fa;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+  margin-bottom: 1rem;
+}
+
+.error-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 3rem;
+  color: #007bff;
+}
+
+.error-message h1 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.error-message p {
+  font-size: 1.2rem;
+  color: #666;
+  margin-bottom: 3rem;
+  line-height: 1.6;
+}
+
+.error-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-bottom: 3rem;
+}
+
+.btn {
+  display: inline-block;
+  padding: 12px 30px;
+  border-radius: 25px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.btn-primary {
+  background: #007bff;
+  color: white;
+  border: 2px solid #007bff;
+}
+
+.btn-primary:hover {
+  background: #0056b3;
+  border-color: #0056b3;
+}
+
+.btn-outline {
+  background: transparent;
+  color: #007bff;
+  border: 2px solid #007bff;
+}
+
+.btn-outline:hover {
+  background: #007bff;
+  color: white;
+}
+
+.error-search {
+  margin-bottom: 3rem;
+}
+
+.error-search p {
+  margin-bottom: 1rem;
+  color: #666;
+}
+
+.search-input-wrapper {
+  display: flex;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.search-input {
+  flex: 1;
+  padding: 12px 20px;
+  border: 2px solid #ddd;
+  border-radius: 25px 0 0 25px;
+  outline: none;
+}
+
+.search-input:focus {
+  border-color: #007bff;
+}
+
+.search-button {
+  padding: 12px 20px;
+  background: #007bff;
+  color: white;
+  border: 2px solid #007bff;
+  border-radius: 0 25px 25px 0;
+  cursor: pointer;
+}
+
+.search-button:hover {
+  background: #0056b3;
+  border-color: #0056b3;
+}
+
+.popular-links h3 {
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+  color: #333;
+}
+
+.links-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.links-grid a {
+  padding: 10px 15px;
+  background: #f8f9fa;
+  color: #666;
+  text-decoration: none;
+  border-radius: 5px;
+  transition: all 0.2s;
+}
+
+.links-grid a:hover {
+  background: #007bff;
+  color: white;
+}
+
+@media (max-width: 768px) {
+  .error-number {
+    font-size: 6rem;
+  }
+  
+  .error-message h1 {
+    font-size: 2rem;
+  }
+  
+  .error-message p {
+    font-size: 1rem;
+  }
+  
+  .error-actions {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .search-input-wrapper {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .search-input,
+  .search-button {
+    border-radius: 25px;
+  }
+  
+  .links-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+</style>

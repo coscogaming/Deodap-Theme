@@ -1,0 +1,346 @@
+{% comment %}
+  Product Card Snippet
+  Displays individual product with image, title, price, and rating
+  
+  Accepts:
+  - product: product object
+  - show_vendor: boolean (optional)
+  - show_rating: boolean (optional)
+  - image_ratio: string (optional)
+{% endcomment %}
+
+{% assign show_vendor = show_vendor | default: false %}
+{% assign show_rating = show_rating | default: true %}
+{% assign image_ratio = image_ratio | default: 'square' %}
+
+<div class="product-card" data-product-id="{{ product.id }}">
+  <div class="product-card-inner">
+    <!-- Product Image -->
+    <div class="product-image {{ image_ratio }}">
+      <a href="{{ product.url }}" class="product-link">
+        {% if product.featured_media %}
+          <img src="{{ product.featured_media | img_url: '400x400' }}" 
+               alt="{{ product.featured_media.alt | escape }}"
+               class="product-img primary"
+               loading="lazy">
+          
+          {% if product.media[1] %}
+            <img src="{{ product.media[1] | img_url: '400x400' }}" 
+                 alt="{{ product.media[1].alt | escape }}"
+                 class="product-img secondary"
+                 loading="lazy">
+          {% endif %}
+        {% else %}
+          <div class="product-img-placeholder">
+            {% render 'icon-product' %}
+          </div>
+        {% endif %}
+      </a>
+      
+      <!-- Sale Badge -->
+      {% if product.compare_at_price > product.price %}
+        <div class="product-badge sale-badge">
+          {% assign discount = product.compare_at_price | minus: product.price %}
+          {% assign discount_percentage = discount | times: 100 | divided_by: product.compare_at_price %}
+          -{{ discount_percentage }}%
+        </div>
+      {% endif %}
+      
+      <!-- Out of Stock Badge -->
+      {% unless product.available %}
+        <div class="product-badge sold-out-badge">
+          {{ 'products.general.sold_out' | t }}
+        </div>
+      {% endunless %}
+      
+      <!-- Quick Add Button -->
+      {% if product.available and product.variants.size == 1 %}
+        <button class="quick-add-btn" 
+                data-variant-id="{{ product.first_available_variant.id }}"
+                data-product-title="{{ product.title | escape }}">
+          {% render 'icon-cart' %}
+          <span>{{ 'products.general.quick_add' | t }}</span>
+        </button>
+      {% endif %}
+      
+      <!-- Wishlist Button -->
+      <button class="wishlist-btn" data-product-id="{{ product.id }}">
+        {% render 'icon-heart' %}
+      </button>
+    </div>
+    
+    <!-- Product Info -->
+    <div class="product-info">
+      {% if show_vendor and product.vendor != blank %}
+        <div class="product-vendor">{{ product.vendor }}</div>
+      {% endif %}
+      
+      <h3 class="product-title">
+        <a href="{{ product.url }}">{{ product.title }}</a>
+      </h3>
+      
+      {% if show_rating and product.metafields.reviews.rating.value != blank %}
+        <div class="product-rating">
+          {% render 'rating-stars', rating: product.metafields.reviews.rating.value %}
+          <span class="rating-count">({{ product.metafields.reviews.rating_count | default: 0 }})</span>
+        </div>
+      {% endif %}
+      
+      <div class="product-price">
+        {% render 'price', product: product %}
+      </div>
+      
+      {% if product.available %}
+        <div class="product-variants">
+          {% if product.variants.size > 1 %}
+            <span class="variant-count">{{ product.variants.size }} {{ 'products.general.variants' | t }}</span>
+          {% endif %}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<style>
+.product-card {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  height: 100%;
+}
+
+.product-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.product-card-inner {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.product-image {
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.product-image.square {
+  aspect-ratio: 1;
+}
+
+.product-image.portrait {
+  aspect-ratio: 3/4;
+}
+
+.product-image.landscape {
+  aspect-ratio: 4/3;
+}
+
+.product-link {
+  display: block;
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.product-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: all 0.3s ease;
+}
+
+.product-img.secondary {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+}
+
+.product-card:hover .product-img.primary {
+  opacity: 0;
+}
+
+.product-card:hover .product-img.secondary {
+  opacity: 1;
+}
+
+.product-img-placeholder {
+  width: 100%;
+  height: 100%;
+  background: #f7fafc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #a0aec0;
+}
+
+.product-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  z-index: 2;
+}
+
+.sale-badge {
+  background: #e53e3e;
+  color: white;
+}
+
+.sold-out-badge {
+  background: #718096;
+  color: white;
+}
+
+.quick-add-btn {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%) translateY(100%);
+  background: #2d3748;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  opacity: 0;
+  z-index: 2;
+}
+
+.product-card:hover .quick-add-btn {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}
+
+.quick-add-btn:hover {
+  background: #1a202c;
+}
+
+.wishlist-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 36px;
+  height: 36px;
+  background: rgba(255, 255, 255, 0.9);
+  border: none;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  opacity: 0;
+  z-index: 2;
+}
+
+.product-card:hover .wishlist-btn {
+  opacity: 1;
+}
+
+.wishlist-btn:hover {
+  background: white;
+  color: #e53e3e;
+}
+
+.wishlist-btn.active {
+  color: #e53e3e;
+  background: white;
+}
+
+.product-info {
+  padding: 20px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.product-vendor {
+  font-size: 0.8rem;
+  color: #718096;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
+}
+
+.product-title {
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.4;
+  margin-bottom: 10px;
+  flex-grow: 1;
+}
+
+.product-title a {
+  color: #2d3748;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.product-title a:hover {
+  color: #4299e1;
+}
+
+.product-rating {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.rating-count {
+  font-size: 0.85rem;
+  color: #718096;
+}
+
+.product-price {
+  margin-bottom: 8px;
+}
+
+.variant-count {
+  font-size: 0.85rem;
+  color: #718096;
+}
+
+@media (max-width: 768px) {
+  .product-card {
+    border-radius: 8px;
+  }
+  
+  .product-info {
+    padding: 15px;
+  }
+  
+  .product-title {
+    font-size: 0.95rem;
+  }
+  
+  .quick-add-btn {
+    position: static;
+    transform: none;
+    opacity: 1;
+    width: 100%;
+    margin-top: 10px;
+    justify-content: center;
+  }
+  
+  .wishlist-btn {
+    opacity: 1;
+  }
+}
+</style>

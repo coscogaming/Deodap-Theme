@@ -1,0 +1,222 @@
+{% comment %}
+  Price Snippet
+  Displays product pricing with sale indicators
+  
+  Accepts:
+  - product: product object
+  - variant: variant object (optional)
+  - show_badges: boolean (optional)
+  - price_class: string (optional)
+{% endcomment %}
+
+{% assign target = product %}
+{% if variant %}
+  {% assign target = variant %}
+{% endif %}
+
+{% assign show_badges = show_badges | default: true %}
+{% assign price_class = price_class | default: '' %}
+
+<div class="price-wrapper {{ price_class }}">
+  {% if target.compare_at_price > target.price %}
+    <!-- Sale Price -->
+    <div class="price-group sale-price">
+      <span class="price current-price">
+        {{ target.price | money }}
+      </span>
+      <span class="price compare-price">
+        {{ target.compare_at_price | money }}
+      </span>
+      {% if show_badges %}
+        <span class="save-badge">
+          {% assign savings = target.compare_at_price | minus: target.price %}
+          {% assign savings_percentage = savings | times: 100 | divided_by: target.compare_at_price %}
+          {{ 'products.general.save' | t }} {{ savings_percentage }}%
+        </span>
+      {% endif %}
+    </div>
+  {% else %}
+    <!-- Regular Price -->
+    <div class="price-group regular-price">
+      <span class="price current-price">
+        {% if target.price_varies %}
+          {{ 'products.general.from' | t }} {{ target.price_min | money }}
+        {% else %}
+          {{ target.price | money }}
+        {% endif %}
+      </span>
+    </div>
+  {% endif %}
+  
+  {% comment %} Unit Price {% endcomment %}
+  {% if target.unit_price_measurement %}
+    <div class="unit-price">
+      <span class="unit-price-amount">{{ target.unit_price | money }}</span>
+      <span class="unit-price-separator">/</span>
+      <span class="unit-price-unit">
+        {%- if target.unit_price_measurement.reference_value != 1 -%}
+          {{ target.unit_price_measurement.reference_value }}
+        {%- endif -%}
+        {{ target.unit_price_measurement.reference_unit }}
+      </span>
+    </div>
+  {% endif %}
+  
+  {% comment %} Bulk Pricing {% endcomment %}
+  {% if product.price_varies and product.variants.size > 1 %}
+    <div class="bulk-pricing">
+      <span class="bulk-text">{{ 'products.general.bulk_pricing' | t }}</span>
+      <div class="price-range">
+        {{ product.price_min | money }} - {{ product.price_max | money }}
+      </div>
+    </div>
+  {% endif %}
+  
+  {% comment %} Tax Information {% endcomment %}
+  {% if show_badges and settings.show_tax_info %}
+    <div class="tax-info">
+      <small>{{ settings.tax_info_text | default: 'Incl. tax' }}</small>
+    </div>
+  {% endif %}
+</div>
+
+<style>
+.price-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.price-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.price {
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.current-price {
+  color: #2d3748;
+}
+
+.sale-price .current-price {
+  color: #e53e3e;
+  font-size: 1.2rem;
+}
+
+.compare-price {
+  color: #718096;
+  text-decoration: line-through;
+  font-size: 0.95rem;
+  font-weight: 400;
+}
+
+.save-badge {
+  background: #48bb78;
+  color: white;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.unit-price {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  font-size: 0.85rem;
+  color: #718096;
+}
+
+.unit-price-amount {
+  font-weight: 500;
+}
+
+.bulk-pricing {
+  padding: 8px 12px;
+  background: #f7fafc;
+  border-radius: 6px;
+  border-left: 3px solid #4299e1;
+}
+
+.bulk-text {
+  font-size: 0.8rem;
+  color: #4299e1;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: block;
+  margin-bottom: 2px;
+}
+
+.price-range {
+  font-size: 0.9rem;
+  color: #2d3748;
+  font-weight: 500;
+}
+
+.tax-info {
+  margin-top: 4px;
+}
+
+.tax-info small {
+  color: #718096;
+  font-size: 0.8rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .price {
+    font-size: 1rem;
+  }
+  
+  .sale-price .current-price {
+    font-size: 1.1rem;
+  }
+  
+  .price-group {
+    gap: 8px;
+  }
+  
+  .save-badge {
+    font-size: 0.7rem;
+    padding: 1px 6px;
+  }
+}
+
+/* Variants for different contexts */
+.price-wrapper.large {
+  gap: 8px;
+}
+
+.price-wrapper.large .price {
+  font-size: 1.4rem;
+}
+
+.price-wrapper.large .sale-price .current-price {
+  font-size: 1.5rem;
+}
+
+.price-wrapper.small .price {
+  font-size: 0.95rem;
+}
+
+.price-wrapper.small .sale-price .current-price {
+  font-size: 1rem;
+}
+
+.price-wrapper.inline .price-group {
+  display: inline-flex;
+}
+
+.price-wrapper.center {
+  align-items: center;
+  text-align: center;
+}
+</style>

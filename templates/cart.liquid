@@ -1,0 +1,365 @@
+{% comment %}
+  Shopping cart page template
+{% endcomment %}
+
+<div class="cart-page">
+  <div class="container">
+    <h1 class="page-title">Shopping Cart</h1>
+    
+    {% if cart.item_count > 0 %}
+      <div class="cart-wrapper">
+        <!-- Cart Items -->
+        <div class="cart-items">
+          <form action="{{ routes.cart_url }}" method="post" novalidate class="cart-form">
+            {% for item in cart.items %}
+              <div class="cart-item" data-variant-id="{{ item.variant.id }}">
+                <div class="item-image">
+                  {% if item.image %}
+                    <img src="{{ item.image | img_url: '150x150' }}" alt="{{ item.title | escape }}">
+                  {% else %}
+                    <div class="no-image">{% render 'icon', icon: 'image' %}</div>
+                  {% endif %}
+                </div>
+                
+                <div class="item-details">
+                  <h4 class="item-title">
+                    <a href="{{ item.url }}">{{ item.product.title }}</a>
+                  </h4>
+                  
+                  {% unless item.variant.title == 'Default Title' %}
+                    <div class="item-variant">{{ item.variant.title }}</div>
+                  {% endunless %}
+                  
+                  <div class="item-price">
+                    {% if item.original_price != item.final_price %}
+                      <span class="original-price">${{ item.original_price | money_without_currency }}</span>
+                    {% endif %}
+                    <span class="final-price">${{ item.final_price | money_without_currency }}</span>
+                  </div>
+                </div>
+                
+                <div class="item-quantity">
+                  <div class="quantity-input">
+                    <button type="button" class="qty-btn" onclick="updateQuantity({{ item.index }}, {{ item.quantity | minus: 1 }})">-</button>
+                    <input type="number" 
+                           name="updates[]" 
+                           value="{{ item.quantity }}" 
+                           min="0" 
+                           class="qty-input"
+                           data-index="{{ item.index }}">
+                    <button type="button" class="qty-btn" onclick="updateQuantity({{ item.index }}, {{ item.quantity | plus: 1 }})">+</button>
+                  </div>
+                </div>
+                
+                <div class="item-total">
+                  ${{ item.final_line_price | money_without_currency }}
+                </div>
+                
+                <div class="item-remove">
+                  <button type="button" class="remove-btn" onclick="removeItem({{ item.index }})">
+                    {% render 'icon', icon: 'trash' %}
+                  </button>
+                </div>
+              </div>
+            {% endfor %}
+            
+            <div class="cart-actions">
+              <button type="submit" name="update" class="btn btn-outline">Update Cart</button>
+              <button type="button" class="btn btn-outline" onclick="clearCart()">Clear Cart</button>
+            </div>
+          </form>
+        </div>
+        
+        <!-- Cart Summary -->
+        <div class="cart-summary">
+          <h3>Order Summary</h3>
+          
+          <div class="summary-line">
+            <span>Subtotal ({{ cart.item_count }} items)</span>
+            <span>${{ cart.total_price | money_without_currency }}</span>
+          </div>
+          
+          {% if cart.total_discounts > 0 %}
+            <div class="summary-line discount">
+              <span>Discount</span>
+              <span>-${{ cart.total_discounts | money_without_currency }}</span>
+            </div>
+          {% endif %}
+          
+          <div class="summary-line shipping">
+            <span>Shipping</span>
+            <span>Calculated at checkout</span>
+          </div>
+          
+          <div class="summary-total">
+            <span>Total</span>
+            <span>${{ cart.total_price | money_without_currency }}</span>
+          </div>
+          
+          <button type="submit" name="add" class="checkout-btn" onclick="window.location.href='/checkout'">
+            Proceed to Checkout
+          </button>
+          
+          <div class="secure-checkout">
+            {% render 'icon', icon: 'lock' %}
+            <span>Secure Checkout</span>
+          </div>
+        </div>
+      </div>
+      
+    {% else %}
+      <!-- Empty Cart -->
+      <div class="empty-cart">
+        <div class="empty-cart-icon">
+          {% render 'icon', icon: 'shopping-cart' %}
+        </div>
+        <h3>Your cart is empty</h3>
+        <p>Add some products to your cart to get started!</p>
+        <a href="{{ routes.all_products_collection_url }}" class="btn btn-primary">Continue Shopping</a>
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+<script>
+function updateQuantity(index, newQuantity) {
+  if (newQuantity < 0) newQuantity = 0;
+  
+  const input = document.querySelector(`input[data-index="${index}"]`);
+  input.value = newQuantity;
+  
+  // Submit form to update cart
+  input.closest('form').submit();
+}
+
+function removeItem(index) {
+  updateQuantity(index, 0);
+}
+
+function clearCart() {
+  if (confirm('Are you sure you want to clear your cart?')) {
+    const inputs = document.querySelectorAll('.qty-input');
+    inputs.forEach(input => input.value = 0);
+    document.querySelector('.cart-form').submit();
+  }
+}
+</script>
+
+<style>
+.cart-page {
+  padding: 40px 0;
+  min-height: 60vh;
+}
+
+.page-title {
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 3rem;
+  color: #333;
+}
+
+.cart-wrapper {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 3rem;
+}
+
+.cart-item {
+  display: grid;
+  grid-template-columns: 100px 1fr auto auto 50px;
+  gap: 1rem;
+  align-items: center;
+  padding: 1.5rem 0;
+  border-bottom: 1px solid #eee;
+}
+
+.item-image img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.no-image {
+  width: 100px;
+  height: 100px;
+  background: #f5f5f5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+}
+
+.item-title {
+  margin-bottom: 0.5rem;
+}
+
+.item-title a {
+  color: #333;
+  text-decoration: none;
+}
+
+.item-variant {
+  color: #666;
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+}
+
+.item-price .original-price {
+  text-decoration: line-through;
+  color: #999;
+  margin-right: 0.5rem;
+}
+
+.item-price .final-price {
+  color: #007bff;
+  font-weight: 500;
+}
+
+.quantity-input {
+  display: flex;
+  align-items: center;
+}
+
+.qty-btn {
+  width: 30px;
+  height: 30px;
+  border: 1px solid #ddd;
+  background: white;
+  cursor: pointer;
+}
+
+.qty-input {
+  width: 50px;
+  height: 30px;
+  text-align: center;
+  border: 1px solid #ddd;
+  border-left: none;
+  border-right: none;
+}
+
+.item-total {
+  font-weight: 500;
+  color: #333;
+}
+
+.remove-btn {
+  background: none;
+  border: none;
+  color: #dc3545;
+  cursor: pointer;
+  padding: 5px;
+}
+
+.cart-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid #eee;
+}
+
+.cart-summary {
+  background: #f8f9fa;
+  padding: 2rem;
+  border-radius: 8px;
+  height: fit-content;
+}
+
+.cart-summary h3 {
+  margin-bottom: 1.5rem;
+  color: #333;
+}
+
+.summary-line {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  color: #666;
+}
+
+.summary-line.discount {
+  color: #28a745;
+}
+
+.summary-total {
+  display: flex;
+  justify-content: space-between;
+  font-size: 1.2rem;
+  font-weight: 600;
+  padding-top: 1rem;
+  border-top: 1px solid #ddd;
+  margin: 1rem 0 2rem;
+  color: #333;
+}
+
+.checkout-btn {
+  width: 100%;
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 15px;
+  border-radius: 5px;
+  font-size: 1.1rem;
+  font-weight: 500;
+  cursor: pointer;
+  margin-bottom: 1rem;
+}
+
+.checkout-btn:hover {
+  background: #0056b3;
+}
+
+.secure-checkout {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.empty-cart {
+  text-align: center;
+  padding: 4rem 0;
+}
+
+.empty-cart-icon {
+  font-size: 4rem;
+  color: #ddd;
+  margin-bottom: 2rem;
+}
+
+.empty-cart h3 {
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.empty-cart p {
+  color: #666;
+  margin-bottom: 2rem;
+}
+
+@media (max-width: 968px) {
+  .cart-wrapper {
+    grid-template-columns: 1fr;
+  }
+  
+  .cart-item {
+    grid-template-columns: 80px 1fr;
+    gap: 1rem;
+  }
+  
+  .item-quantity,
+  .item-total,
+  .item-remove {
+    grid-column: 2;
+    justify-self: end;
+  }
+  
+  .cart-actions {
+    flex-direction: column;
+  }
+}
+</style>

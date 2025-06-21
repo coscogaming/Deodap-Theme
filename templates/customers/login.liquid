@@ -1,0 +1,402 @@
+<!-- templates/customers/login.liquid -->
+<!-- Customer Login Page -->
+
+<div class="customer-login-wrapper">
+  <div class="container">
+    <div class="login-page-content">
+      <div class="login-header">
+        <h1 class="page-title">{{ 'customer.login.title' | t }}</h1>
+        <p class="login-subtitle">{{ 'customer.login.subtitle' | t }}</p>
+      </div>
+
+      <div class="login-forms-container">
+        <!-- Login Form -->
+        <div class="login-form-section">
+          <div class="form-card">
+            <h2 class="form-title">{{ 'customer.login.sign_in' | t }}</h2>
+            
+            {% form 'customer_login', novalidate: 'novalidate' %}
+              {% if form.errors %}
+                <div class="form-errors">
+                  <div class="error-message">
+                    <svg class="error-icon" width="16" height="16" viewBox="0 0 16 16">
+                      <path d="M8 0C3.6 0 0 3.6 0 8s3.6 8 8 8 8-3.6 8-8-3.6-8-8-8zM7 3h2v6H7V3zM7 11h2v2H7v-2z"/>
+                    </svg>
+                    {{ form.errors | default_errors }}
+                  </div>
+                </div>
+              {% endif %}
+
+              <div class="form-group">
+                <label for="CustomerEmail" class="form-label">
+                  {{ 'customer.login.email' | t }}
+                </label>
+                <input 
+                  type="email" 
+                  name="customer[email]" 
+                  id="CustomerEmail" 
+                  class="form-input"
+                  autocomplete="email"
+                  {% if form.email %}value="{{ form.email }}"{% endif %}
+                  placeholder="{{ 'customer.login.email_placeholder' | t }}"
+                  required
+                >
+              </div>
+
+              {% if form.password_needed %}
+                <div class="form-group">
+                  <label for="CustomerPassword" class="form-label">
+                    {{ 'customer.login.password' | t }}
+                  </label>
+                  <div class="password-input-wrapper">
+                    <input 
+                      type="password" 
+                      name="customer[password]" 
+                      id="CustomerPassword" 
+                      class="form-input"
+                      autocomplete="current-password"
+                      placeholder="{{ 'customer.login.password_placeholder' | t }}"
+                      required
+                    >
+                    <button type="button" class="password-toggle" onclick="togglePassword('CustomerPassword')">
+                      <svg class="eye-icon" width="20" height="20" viewBox="0 0 24 24">
+                        <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              {% endif %}
+
+              <div class="form-actions">
+                <button type="submit" class="btn btn-primary btn-full">
+                  {{ 'customer.login.sign_in' | t }}
+                </button>
+              </div>
+
+              <div class="form-footer">
+                <a href="{{ routes.account_recover_url }}" class="forgot-password-link">
+                  {{ 'customer.login.forgot_password' | t }}
+                </a>
+              </div>
+            {% endform %}
+          </div>
+        </div>
+
+        <!-- Register Form -->
+        <div class="register-form-section">
+          <div class="form-card">
+            <h2 class="form-title">{{ 'customer.register.title' | t }}</h2>
+            <p class="register-subtitle">{{ 'customer.register.subtitle' | t }}</p>
+            
+            <div class="register-benefits">
+              <ul class="benefits-list">
+                <li>{{ 'customer.register.benefit_1' | t }}</li>
+                <li>{{ 'customer.register.benefit_2' | t }}</li>
+                <li>{{ 'customer.register.benefit_3' | t }}</li>
+              </ul>
+            </div>
+
+            <div class="register-action">
+              <a href="{{ routes.account_register_url }}" class="btn btn-secondary btn-full">
+                {{ 'customer.register.create_account' | t }}
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Guest Checkout Option -->
+      {% if shop.checkout_api_supported %}
+        <div class="guest-checkout-section">
+          <div class="divider">
+            <span class="divider-text">{{ 'customer.login.or' | t }}</span>
+          </div>
+          <p class="guest-checkout-text">{{ 'customer.login.guest_title' | t }}</p>
+          <a href="{{ routes.cart_url }}" class="btn btn-outline">
+            {{ 'customer.login.guest_continue' | t }}
+          </a>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<style>
+.customer-login-wrapper {
+  padding: 60px 0;
+  background-color: #f8f9fa;
+  min-height: 70vh;
+}
+
+.login-page-content {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.login-header {
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.page-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.login-subtitle {
+  font-size: 1.1rem;
+  color: #666;
+  margin: 0;
+}
+
+.login-forms-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  margin-bottom: 40px;
+}
+
+.form-card {
+  background: white;
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+}
+
+.form-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.register-subtitle {
+  text-align: center;
+  color: #666;
+  margin-bottom: 25px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-label {
+  display: block;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.form-input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 16px;
+  transition: border-color 0.3s ease;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: #007bff;
+}
+
+.password-input-wrapper {
+  position: relative;
+}
+
+.password-toggle {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #666;
+}
+
+.btn {
+  display: inline-block;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 500;
+  text-decoration: none;
+  text-align: center;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.btn-primary {
+  background-color: #007bff;
+  color: white;
+  border-color: #007bff;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+  border-color: #0056b3;
+}
+
+.btn-secondary {
+  background-color: #28a745;
+  color: white;
+  border-color: #28a745;
+}
+
+.btn-secondary:hover {
+  background-color: #1e7e34;
+  border-color: #1e7e34;
+}
+
+.btn-outline {
+  background-color: transparent;
+  color: #007bff;
+  border-color: #007bff;
+}
+
+.btn-outline:hover {
+  background-color: #007bff;
+  color: white;
+}
+
+.btn-full {
+  width: 100%;
+}
+
+.form-errors {
+  margin-bottom: 20px;
+}
+
+.error-message {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px;
+  background-color: #f8d7da;
+  color: #721c24;
+  border-radius: 6px;
+  border: 1px solid #f5c6cb;
+}
+
+.error-icon {
+  fill: currentColor;
+  flex-shrink: 0;
+}
+
+.forgot-password-link {
+  color: #007bff;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.forgot-password-link:hover {
+  text-decoration: underline;
+}
+
+.form-footer {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.benefits-list {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 25px;
+}
+
+.benefits-list li {
+  padding: 8px 0;
+  position: relative;
+  padding-left: 25px;
+}
+
+.benefits-list li:before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  color: #28a745;
+  font-weight: bold;
+}
+
+.guest-checkout-section {
+  text-align: center;
+  padding-top: 30px;
+}
+
+.divider {
+  position: relative;
+  margin: 30px 0;
+}
+
+.divider:before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background-color: #e0e0e0;
+}
+
+.divider-text {
+  background-color: #f8f9fa;
+  padding: 0 20px;
+  color: #666;
+  position: relative;
+}
+
+.guest-checkout-text {
+  margin-bottom: 15px;
+  color: #666;
+}
+
+@media (max-width: 768px) {
+  .login-forms-container {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+  
+  .form-card {
+    padding: 30px 20px;
+  }
+  
+  .page-title {
+    font-size: 2rem;
+  }
+  
+  .customer-login-wrapper {
+    padding: 40px 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .form-card {
+    padding: 25px 15px;
+  }
+  
+  .btn {
+    padding: 14px 20px;
+  }
+}
+</style>
+
+<script>
+function togglePassword(inputId) {
+  const input = document.getElementById(inputId);
+  const button = input.nextElementSibling;
+  
+  if (input.type === 'password') {
+    input.type = 'text';
+    button.innerHTML = '<svg class="eye-icon" width="20" height="20" viewBox="0 0 24 24"><path d="M12 7c2.76 0 5 2.24 5 5 0 .65-.13 1.26-.36 1.83l2.92 2.92c1.51-1.26 2.7-2.89 3.43-4.75-1.73-4.39-6-7.5-11-7.5-1.4 0-2.74.25-3.98.7l2.16 2.16C10.74 7.13 11.35 7 12 7zM2 4.27l2.28 2.28.46.46C3.08 8.3 1.78 10.02 1 12c1.73 4.39 6 7.5 11 7.5 1.55 0 3.03-.3 4.38-.84l.42.42L19.73 22 21 20.73 3.27 3 2 4.27zM7.53 9.8l1.55 1.55c-.05.21-.08.43-.08.65 0 1.66 1.34 3 3 3 .22 0 .44-.03.65-.08l1.55 1.55c-.67.33-1.41.53-2.2.53-2.76 0-5-2.24-5-5 0-.79.2-1.53.53-2.2zm4.31-.78l3.15 3.15.02-.16c0-1.66-1.34-3-3-3l-.17.01z"/></svg>';
+  } else {
+    input.type = 'password';
+    button.innerHTML = '<svg class="eye-icon" width="20" height="20" viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>';
+  }
+}
+</script>

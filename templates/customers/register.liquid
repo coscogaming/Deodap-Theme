@@ -1,0 +1,582 @@
+<!-- templates/customers/register.liquid -->
+<!-- Customer Registration Page -->
+
+<div class="customer-register-wrapper">
+  <div class="container">
+    <div class="register-page-content">
+      <div class="register-header">
+        <h1 class="page-title">{{ 'customer.register.title' | t }}</h1>
+        <p class="register-subtitle">{{ 'customer.register.subtitle' | t }}</p>
+      </div>
+
+      <div class="register-content">
+        <div class="register-form-container">
+          <div class="form-card">
+            {% form 'create_customer', novalidate: 'novalidate' %}
+              {% if form.errors %}
+                <div class="form-errors">
+                  <div class="error-message">
+                    <svg class="error-icon" width="16" height="16" viewBox="0 0 16 16">
+                      <path d="M8 0C3.6 0 0 3.6 0 8s3.6 8 8 8 8-3.6 8-8-3.6-8-8-8zM7 3h2v6H7V3zM7 11h2v2H7v-2z"/>
+                    </svg>
+                    <div class="error-list">
+                      {{ form.errors | default_errors }}
+                    </div>
+                  </div>
+                </div>
+              {% endif %}
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="RegisterFirstName" class="form-label">
+                    {{ 'customer.register.first_name' | t }} <span class="required">*</span>
+                  </label>
+                  <input 
+                    type="text" 
+                    name="customer[first_name]" 
+                    id="RegisterFirstName" 
+                    class="form-input"
+                    {% if form.first_name %}value="{{ form.first_name }}"{% endif %}
+                    placeholder="{{ 'customer.register.first_name_placeholder' | t }}"
+                    required
+                    autocomplete="given-name"
+                  >
+                </div>
+
+                <div class="form-group">
+                  <label for="RegisterLastName" class="form-label">
+                    {{ 'customer.register.last_name' | t }} <span class="required">*</span>
+                  </label>
+                  <input 
+                    type="text" 
+                    name="customer[last_name]" 
+                    id="RegisterLastName" 
+                    class="form-input"
+                    {% if form.last_name %}value="{{ form.last_name }}"{% endif %}
+                    placeholder="{{ 'customer.register.last_name_placeholder' | t }}"
+                    required
+                    autocomplete="family-name"
+                  >
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="RegisterEmail" class="form-label">
+                  {{ 'customer.register.email' | t }} <span class="required">*</span>
+                </label>
+                <input 
+                  type="email" 
+                  name="customer[email]" 
+                  id="RegisterEmail" 
+                  class="form-input"
+                  {% if form.email %}value="{{ form.email }}"{% endif %}
+                  placeholder="{{ 'customer.register.email_placeholder' | t }}"
+                  required
+                  autocomplete="email"
+                >
+              </div>
+
+              <div class="form-group">
+                <label for="RegisterPassword" class="form-label">
+                  {{ 'customer.register.password' | t }} <span class="required">*</span>
+                </label>
+                <div class="password-input-wrapper">
+                  <input 
+                    type="password" 
+                    name="customer[password]" 
+                    id="RegisterPassword" 
+                    class="form-input"
+                    placeholder="{{ 'customer.register.password_placeholder' | t }}"
+                    required
+                    autocomplete="new-password"
+                    minlength="6"
+                  >
+                  <button type="button" class="password-toggle" onclick="togglePassword('RegisterPassword')">
+                    <svg class="eye-icon" width="20" height="20" viewBox="0 0 24 24">
+                      <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
+                    </svg>
+                  </button>
+                </div>
+                <div class="password-requirements">
+                  <small>{{ 'customer.register.password_requirements' | t }}</small>
+                </div>
+              </div>
+
+              <!-- Marketing Acceptance -->
+              <div class="form-group">
+                <div class="checkbox-wrapper">
+                  <input 
+                    type="checkbox" 
+                    name="customer[accepts_marketing]" 
+                    id="RegisterMarketing" 
+                    class="form-checkbox"
+                    value="1"
+                  >
+                  <label for="RegisterMarketing" class="checkbox-label">
+                    {{ 'customer.register.accepts_marketing' | t }}
+                  </label>
+                </div>
+              </div>
+
+              <!-- Terms and Privacy -->
+              <div class="form-group">
+                <div class="checkbox-wrapper">
+                  <input 
+                    type="checkbox" 
+                    id="RegisterTerms" 
+                    class="form-checkbox"
+                    required
+                  >
+                  <label for="RegisterTerms" class="checkbox-label">
+                    {{ 'customer.register.terms_html' | t }}
+                  </label>
+                </div>
+              </div>
+
+              <div class="form-actions">
+                <button type="submit" class="btn btn-primary btn-full">
+                  {{ 'customer.register.create_account' | t }}
+                </button>
+              </div>
+            {% endform %}
+
+            <div class="form-footer">
+              <p class="login-link">
+                {{ 'customer.register.already_have_account' | t }}
+                <a href="{{ routes.account_login_url }}">{{ 'customer.register.sign_in' | t }}</a>
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Benefits Sidebar -->
+        <div class="benefits-sidebar">
+          <div class="benefits-card">
+            <h3 class="benefits-title">{{ 'customer.register.benefits_title' | t }}</h3>
+            
+            <div class="benefits-list">
+              <div class="benefit-item">
+                <div class="benefit-icon">
+                  <svg width="24" height="24" viewBox="0 0 24 24">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                  </svg>
+                </div>
+                <div class="benefit-content">
+                  <h4>{{ 'customer.register.benefit_1_title' | t }}</h4>
+                  <p>{{ 'customer.register.benefit_1_desc' | t }}</p>
+                </div>
+              </div>
+
+              <div class="benefit-item">
+                <div class="benefit-icon">
+                  <svg width="24" height="24" viewBox="0 0 24 24">
+                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                  </svg>
+                </div>
+                <div class="benefit-content">
+                  <h4>{{ 'customer.register.benefit_2_title' | t }}</h4>
+                  <p>{{ 'customer.register.benefit_2_desc' | t }}</p>
+                </div>
+              </div>
+
+              <div class="benefit-item">
+                <div class="benefit-icon">
+                  <svg width="24" height="24" viewBox="0 0 24 24">
+                    <path d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/>
+                  </svg>
+                </div>
+                <div class="benefit-content">
+                  <h4>{{ 'customer.register.benefit_3_title' | t }}</h4>
+                  <p>{{ 'customer.register.benefit_3_desc' | t }}</p>
+                </div>
+              </div>
+
+              <div class="benefit-item">
+                <div class="benefit-icon">
+                  <svg width="24" height="24" viewBox="0 0 24 24">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm4.59-12.42L10 14.17l-2.59-2.58L6 13l4 4 8-8-1.41-1.42z"/>
+                  </svg>
+                </div>
+                <div class="benefit-content">
+                  <h4>{{ 'customer.register.benefit_4_title' | t }}</h4>
+                  <p>{{ 'customer.register.benefit_4_desc' | t }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.customer-register-wrapper {
+  padding: 60px 0;
+  background-color: #f8f9fa;
+  min-height: 80vh;
+}
+
+.register-page-content {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.register-header {
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.page-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.register-subtitle {
+  font-size: 1.1rem;
+  color: #666;
+  margin: 0;
+}
+
+.register-content {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 50px;
+}
+
+.form-card {
+  background: white;
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-label {
+  display: block;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.required {
+  color: #dc3545;
+}
+
+.form-input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 16px;
+  transition: border-color 0.3s ease;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 3px rgba(0,123,255,0.1);
+}
+
+.form-input:invalid:not(:focus):not(:placeholder-shown) {
+  border-color: #dc3545;
+}
+
+.password-input-wrapper {
+  position: relative;
+}
+
+.password-toggle {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #666;
+  padding: 4px;
+}
+
+.password-requirements {
+  margin-top: 6px;
+}
+
+.password-requirements small {
+  color: #666;
+  font-size: 13px;
+}
+
+.checkbox-wrapper {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.form-checkbox {
+  margin-top: 2px;
+  width: 18px;
+  height: 18px;
+  accent-color: #007bff;
+}
+
+.checkbox-label {
+  font-size: 14px;
+  line-height: 1.5;
+  color: #555;
+}
+
+.checkbox-label a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.checkbox-label a:hover {
+  text-decoration: underline;
+}
+
+.btn {
+  display: inline-block;
+  padding: 14px 28px;
+  border-radius: 8px;
+  font-weight: 500;
+  text-decoration: none;
+  text-align: center;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.btn-primary {
+  background-color: #007bff;
+  color: white;
+  border-color: #007bff;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+  border-color: #0056b3;
+  transform: translateY(-1px);
+}
+
+.btn-full {
+  width: 100%;
+}
+
+.form-errors {
+  margin-bottom: 25px;
+}
+
+.error-message {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 16px;
+  background-color: #f8d7da;
+  color: #721c24;
+  border-radius: 8px;
+  border: 1px solid #f5c6cb;
+}
+
+.error-icon {
+  fill: currentColor;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.form-footer {
+  text-align: center;
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px solid #e0e0e0;
+}
+
+.login-link {
+  color: #666;
+  margin: 0;
+}
+
+.login-link a {
+  color: #007bff;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.login-link a:hover {
+  text-decoration: underline;
+}
+
+.benefits-sidebar {
+  position: sticky;
+  top: 80px;
+  height: fit-content;
+}
+
+.benefits-card {
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+}
+
+.benefits-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 25px;
+  text-align: center;
+}
+
+.benefits-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.benefit-item {
+  display: flex;
+  gap: 15px;
+  align-items: flex-start;
+}
+
+.benefit-icon {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  background-color: #e3f2fd;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.benefit-icon svg {
+  fill: #007bff;
+  width: 20px;
+  height: 20px;
+}
+
+.benefit-content h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #333;
+  margin: 0 0 5px 0;
+}
+
+.benefit-content p {
+  font-size: 14px;
+  color: #666;
+  margin: 0;
+  line-height: 1.4;
+}
+
+@media (max-width: 992px) {
+  .register-content {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+  
+  .benefits-sidebar {
+    position: static;
+  }
+}
+
+@media (max-width: 768px) {
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+  
+  .form-card {
+    padding: 30px 20px;
+  }
+  
+  .benefits-card {
+    padding: 25px 20px;
+  }
+  
+  .page-title {
+    font-size: 2rem;
+  }
+  
+  .customer-register-wrapper {
+    padding: 40px 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .form-card, .benefits-card {
+    padding: 20px 15px;
+  }
+  
+  .btn {
+    padding: 16px 24px;
+  }
+  
+  .benefit-item {
+    gap: 12px;
+  }
+  
+  .benefit-icon {
+    width: 35px;
+    height: 35px;
+  }
+}
+</style>
+
+<script>
+function togglePassword(inputId) {
+  const input = document.getElementById(inputId);
+  const button = input.nextElementSibling;
+  
+  if (input.type === 'password') {
+    input.type = 'text';
+    button.innerHTML = '<svg class="eye-icon" width="20" height="20" viewBox="0 0 24 24"><path d="M12 7c2.76 0 5 2.24 5 5 0 .65-.13 1.26-.36 1.83l2.92 2.92c1.51-1.26 2.7-2.89 3.43-4.75-1.73-4.39-6-7.5-11-7.5-1.4 0-2.74.25-3.98.7l2.16 2.16C10.74 7.13 11.35 7 12 7zM2 4.27l2.28 2.28.46.46C3.08 8.3 1.78 10.02 1 12c1.73 4.39 6 7.5 11 7.5 1.55 0 3.03-.3 4.38-.84l.42.42L19.73 22 21 20.73 3.27 3 2 4.27zM7.53 9.8l1.55 1.55c-.05.21-.08.43-.08.65 0 1.66 1.34 3 3 3 .22 0 .44-.03.65-.08l1.55 1.55c-.67.33-1.41.53-2.2.53-2.76 0-5-2.24-5-5 0-.79.2-1.53.53-2.2zm4.31-.78l3.15 3.15.02-.16c0-1.66-1.34-3-3-3l-.17.01z"/></svg>';
+  } else {
+    input.type = 'password';
+    button.innerHTML = '<svg class="eye-icon" width="20" height="20" viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>';
+  }
+}
+
+// Form validation
+document.addEventListener('DOMContentLoaded', function() {
+  const form = document.querySelector('form[action*="customer"]');
+  if (form) {
+    form.addEventListener('submit', function(e) {
+      const termsCheckbox = document.getElementById('RegisterTerms');
+      if (!termsCheckbox.checked) {
+        e.preventDefault();
+        alert('Please accept the terms and conditions to continue.');
+        termsCheckbox.focus();
+      }
+    });
+    
+    // Password strength indicator
+    const passwordInput = document.getElementById('RegisterPassword');
+    if (passwordInput) {
+      passwordInput.addEventListener('input', function() {
+        const password = this.value;
+        const requirements = document.querySelector('.password-requirements small');
+        
+        if (password.length >= 6) {
+          requirements.style.color = '#28a745';
+        } else {
+          requirements.style.color = '#666';
+        }
+      });
+    }
+  }
+});
+</script>

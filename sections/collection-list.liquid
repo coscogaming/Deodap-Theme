@@ -1,0 +1,235 @@
+{% comment %}
+  Collection List Section
+  Displays a grid of collections with images and titles
+{% endcomment %}
+
+<div class="collection-list-section">
+  <div class="container">
+    {% if section.settings.heading != blank %}
+      <div class="section-header">
+        <h2 class="section-title">{{ section.settings.heading }}</h2>
+        {% if section.settings.subheading != blank %}
+          <p class="section-subtitle">{{ section.settings.subheading }}</p>
+        {% endif %}
+      </div>
+    {% endif %}
+
+    <div class="collection-grid">
+      {% for block in section.blocks %}
+        {% assign collection = collections[block.settings.collection] %}
+        {% if collection != blank %}
+          <div class="collection-card">
+            <a href="{{ collection.url }}" class="collection-link">
+              <div class="collection-image">
+                {% if collection.featured_image %}
+                  <img src="{{ collection.featured_image | img_url: '400x400' }}" 
+                       alt="{{ collection.title }}"
+                       loading="lazy">
+                {% else %}
+                  <div class="collection-placeholder">
+                    {% render 'icon-collection' %}
+                  </div>
+                {% endif %}
+                {% if block.settings.overlay_text %}
+                  <div class="collection-overlay">
+                    <span class="overlay-text">{{ block.settings.overlay_text }}</span>
+                  </div>
+                {% endif %}
+              </div>
+              <div class="collection-info">
+                <h3 class="collection-title">{{ collection.title }}</h3>
+                <p class="collection-count">{{ collection.products_count }} 
+                  {%- if collection.products_count == 1 -%}
+                    {{ 'collections.general.item' | t }}
+                  {%- else -%}
+                    {{ 'collections.general.items' | t }}
+                  {%- endif -%}
+                </p>
+              </div>
+            </a>
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+<style>
+.collection-list-section {
+  padding: 60px 0;
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.section-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+  color: #2d3748;
+}
+
+.section-subtitle {
+  font-size: 1.1rem;
+  color: #718096;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.collection-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 30px;
+  margin-top: 40px;
+}
+
+.collection-card {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+  transition: all 0.3s ease;
+}
+
+.collection-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.collection-link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
+.collection-image {
+  position: relative;
+  aspect-ratio: 1;
+  overflow: hidden;
+}
+
+.collection-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.collection-card:hover .collection-image img {
+  transform: scale(1.05);
+}
+
+.collection-placeholder {
+  width: 100%;
+  height: 100%;
+  background: #f7fafc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #a0aec0;
+}
+
+.collection-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.collection-card:hover .collection-overlay {
+  opacity: 1;
+}
+
+.overlay-text {
+  color: white;
+  font-size: 1.2rem;
+  font-weight: 600;
+  text-align: center;
+  padding: 0 20px;
+}
+
+.collection-info {
+  padding: 20px;
+  text-align: center;
+}
+
+.collection-title {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #2d3748;
+}
+
+.collection-count {
+  color: #718096;
+  font-size: 0.9rem;
+}
+
+@media (max-width: 768px) {
+  .collection-list-section {
+    padding: 40px 0;
+  }
+  
+  .section-title {
+    font-size: 2rem;
+  }
+  
+  .collection-grid {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+  }
+}
+</style>
+
+{% schema %}
+{
+  "name": "Collection List",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "default": "Shop by Category",
+      "label": "Heading"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "collection",
+      "name": "Collection",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Select Collection"
+        },
+        {
+          "type": "text",
+          "id": "overlay_text",
+          "label": "Overlay Text"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collection List"
+    }
+  ]
+}
+{% endschema %}

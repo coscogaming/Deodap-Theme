@@ -1,0 +1,235 @@
+{% comment %}
+  Rating Stars Snippet
+  Displays star rating with half-star support
+  
+  Accepts:
+  - rating: number (0-5, supports decimals)
+  - show_rating_text: boolean (optional)
+  - size: string (small, medium, large) (optional)
+{% endcomment %}
+
+{% assign rating = rating | default: 0 %}
+{% assign show_rating_text = show_rating_text | default: false %}
+{% assign size = size | default: 'medium' %}
+
+{% assign full_stars = rating | floor %}
+{% assign has_half_star = rating | modulo: 1 | round: 1 %}
+{% assign empty_stars = 5 | minus: full_stars %}
+{% if has_half_star > 0 %}
+  {% assign empty_stars = empty_stars | minus: 1 %}
+{% endif %}
+
+<div class="rating-stars {{ size }}" data-rating="{{ rating }}">
+  <div class="stars-container">
+    {% comment %} Full Stars {% endcomment %}
+    {% for i in (1..full_stars) %}
+      <span class="star star-full" aria-hidden="true">
+        {% render 'icon-star-filled' %}
+      </span>
+    {% endfor %}
+    
+    {% comment %} Half Star {% endcomment %}
+    {% if has_half_star > 0 %}
+      <span class="star star-half" aria-hidden="true">
+        {% render 'icon-star-half' %}
+      </span>
+    {% endif %}
+    
+    {% comment %} Empty Stars {% endcomment %}
+    {% for i in (1..empty_stars) %}
+      <span class="star star-empty" aria-hidden="true">
+        {% render 'icon-star-outline' %}
+      </span>
+    {% endfor %}
+  </div>
+  
+  {% if show_rating_text %}
+    <span class="rating-text">{{ rating }} {{ 'products.reviews.out_of_five' | t }}</span>
+  {% endif %}
+  
+  {% comment %} Screen reader text {% endcomment %}
+  <span class="sr-only">
+    {{ 'products.reviews.rating_of_stars' | t: rating: rating, max: 5 }}
+  </span>
+</div>
+
+<style>
+.rating-stars {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.stars-container {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.star {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.star svg {
+  width: 100%;
+  height: 100%;
+}
+
+.star-full {
+  color: #ffd700;
+}
+
+.star-half {
+  color: #ffd700;
+}
+
+.star-empty {
+  color: #e2e8f0;
+}
+
+.rating-text {
+  font-size: 0.9em;
+  color: #718096;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Size variants */
+.rating-stars.small .star {
+  width: 14px;
+  height: 14px;
+}
+
+.rating-stars.small .rating-text {
+  font-size: 0.8rem;
+}
+
+.rating-stars.medium .star {
+  width: 16px;
+  height: 16px;
+}
+
+.rating-stars.medium .rating-text {
+  font-size: 0.9rem;
+}
+
+.rating-stars.large .star {
+  width: 20px;
+  height: 20px;
+}
+
+.rating-stars.large .rating-text {
+  font-size: 1rem;
+}
+
+/* Hover effects for interactive ratings */
+.rating-stars.interactive .star {
+  cursor: pointer;
+}
+
+.rating-stars.interactive .star:hover {
+  transform: scale(1.1);
+}
+
+.rating-stars.interactive:hover .star-empty {
+  color: #cbd5e0;
+}
+
+/* Screen reader only */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Animation for loading state */
+@keyframes star-shimmer {
+  0% { opacity: 0.5; }
+  50% { opacity: 1; }
+  100% { opacity: 0.5; }
+}
+
+.rating-stars.loading .star {
+  animation: star-shimmer 1.5s ease-in-out infinite;
+}
+
+.rating-stars.loading .star:nth-child(2) {
+  animation-delay: 0.1s;
+}
+
+.rating-stars.loading .star:nth-child(3) {
+  animation-delay: 0.2s;
+}
+
+.rating-stars.loading .star:nth-child(4) {
+  animation-delay: 0.3s;
+}
+
+.rating-stars.loading .star:nth-child(5) {
+  animation-delay: 0.4s;
+}
+</style>
+
+{% comment %} JavaScript for interactive ratings {% endcomment %}
+{% if interactive %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const ratingStars = document.querySelectorAll('.rating-stars.interactive');
+  
+  ratingStars.forEach(ratingContainer => {
+    const stars = ratingContainer.querySelectorAll('.star');
+    
+    stars.forEach((star, index) => {
+      star.addEventListener('click', function() {
+        const rating = index + 1;
+        updateRating(ratingContainer, rating);
+        
+        // Trigger custom event
+        const event = new CustomEvent('ratingChanged', {
+          detail: { rating: rating }
+        });
+        ratingContainer.dispatchEvent(event);
+      });
+      
+      star.addEventListener('mouseenter', function() {
+        highlightStars(stars, index + 1);
+      });
+    });
+    
+    ratingContainer.addEventListener('mouseleave', function() {
+      const currentRating = parseFloat(ratingContainer.dataset.rating) || 0;
+      highlightStars(stars, currentRating);
+    });
+  });
+  
+  function updateRating(container, rating) {
+    container.dataset.rating = rating;
+    const stars = container.querySelectorAll('.star');
+    highlightStars(stars, rating);
+  }
+  
+  function highlightStars(stars, rating) {
+    stars.forEach((star, index) => {
+      star.classList.remove('star-full', 'star-half', 'star-empty');
+      
+      if (index < Math.floor(rating)) {
+        star.classList.add('star-full');
+      } else if (index < rating) {
+        star.classList.add('star-half');
+      } else {
+        star.classList.add('star-empty');
+      }
+    });
+  }
+});
+</script>
+{% endif %}
